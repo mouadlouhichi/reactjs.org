@@ -99,17 +99,16 @@ This is not React-specific behavior; it is a part of [how functions work in Java
 
 If calling `bind` annoys you, there are two ways you can get around this. If you are using the experimental [public class fields syntax](https://babeljs.io/docs/plugins/transform-class-properties/), you can use class fields to correctly bind callbacks:
 
-```js{2-6}
+```js{7-9}
 class LoggingButton extends React.Component {
-  // This syntax ensures `this` is bound within handleClick.
-  // Warning: this is *experimental* syntax.
-  handleClick = () => {
+  handleClick() {
     console.log('this is:', this);
   }
 
   render() {
+    // This syntax ensures `this` is bound within handleClick
     return (
-      <button onClick={this.handleClick}>
+      <button onClick={() => this.handleClick()}>
         Click me
       </button>
     );
@@ -121,16 +120,18 @@ This syntax is enabled by default in [Create React App](https://github.com/faceb
 
 If you aren't using class fields syntax, you can use an [arrow function](https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Functions/Arrow_functions) in the callback:
 
-```js{7-9}
+
+```js{2-6}
 class LoggingButton extends React.Component {
-  handleClick() {
+  // This syntax ensures `this` is bound within handleClick.
+  // Warning: this is *experimental* syntax.
+  handleClick = () => {
     console.log('this is:', this);
   }
 
   render() {
-    // This syntax ensures `this` is bound within handleClick
     return (
-      <button onClick={() => this.handleClick()}>
+      <button onClick={this.handleClick}>
         Click me
       </button>
     );
